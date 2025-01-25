@@ -1,99 +1,191 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# UDTN-Assessment-API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A NestJS application for managing products with user authentication and role-based access control.
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is a RESTful API built with NestJS that allows users to manage products. It includes features for user registration, login, and role-based access control, ensuring that only authorized users can perform certain actions (e.g., creating, updating, or deleting products). The application uses MongoDB for data storage and implements JWT for secure authentication.
 
-## Project setup
+## Deployed API
 
+You can try out the API with a deployed database at the following link: [API Documentation and Testing](https://udtn-assessment.vercel.app/swagger). This Swagger UI allows you to explore the available endpoints and test them directly.
+
+## Setup Instructions
+
+To set up the project locally, follow these steps:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Mahmoud3mmar/udtn-assessment.gitme.git
+   cd udtn-assessment
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add the following variables. You can check the `.env.example` file for reference:
+   ```plaintext
+   port=3000
+   JWT_SECRET=your_jwt_secret
+   MONGODB_URI=mongodb://localhost:27017/your-database
+   JWT_EXPIRATION=3600
+   ```
+
+4. **Run the application:**
+   ```bash
+   npm run start
+   ```
+
+## How to Run the Tests
+
+To run the tests for the application, use the following command:
 ```bash
-$ npm install
+npm run test
 ```
 
-## Compile and run the project
+This will execute all unit tests defined in the project, ensuring that the application behaves as expected.
 
-```bash
-# development
-$ npm run start
+## Example API Usage
 
-# watch mode
-$ npm run start:dev
+### User Registration
 
-# production mode
-$ npm run start:prod
+**Endpoint:** `POST /auth/register`
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "role": "user"
+}
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+**Response:**
+```json
+{
+  "message": "User successfully registered"
+}
 ```
 
-## Deployment
+### User Login
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+**Endpoint:** `POST /auth/login`
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Response:**
+```json
+{
+  "access_token": "your_jwt_token"
+}
+```
 
-## Resources
+### Product Endpoints
 
-Check out a few resources that may come in handy when working with NestJS:
+1. **Create a Product**
+   - **Endpoint:** `POST /products`
+   - **Description:** Creates a new product (Admin only).
+   - **Request Body:**
+     ```json
+     {
+       "name": "iPhone 14",
+       "description": "Latest Apple smartphone",
+       "price": 999.99,
+       "stock": 100
+     }
+     ```
+   - **Response:**
+     ```json
+     {
+       "_id": "507f1f77bcf86cd799439011",
+       "name": "iPhone 14",
+       "description": "Latest Apple smartphone",
+       "price": 999.99,
+       "stock": 100
+     }
+     ```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+2. **Get All Products**
+   - **Endpoint:** `GET /products`
+   - **Description:** Retrieves all products with optional pagination and sorting.
+   - **Query Parameters:**
+     - `page`: (optional) Page number for pagination (default is 1).
+     - `limit`: (optional) Number of items per page (default is 10).
+     - `sortBy`: (optional) Field to sort by (default is "name").
+     - `order`: (optional) Order of sorting (default is "asc").
+   - **Response:**
+     ```json
+     {
+       "products": [
+         {
+           "_id": "507f1f77bcf86cd799439011",
+           "name": "iPhone 14",
+           "description": "Latest Apple smartphone",
+           "price": 999.99,
+           "stock": 100
+         }
+       ],
+       "totalItems": 1,
+       "totalPages": 1
+     }
+     ```
 
-## Support
+3. **Get a Product by ID**
+   - **Endpoint:** `GET /products/:id`
+   - **Description:** Retrieves a single product by its ID.
+   - **Response:**
+     ```json
+     {
+       "_id": "507f1f77bcf86cd799439011",
+       "name": "iPhone 14",
+       "description": "Latest Apple smartphone",
+       "price": 999.99,
+       "stock": 100
+     }
+     ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+4. **Update a Product**
+   - **Endpoint:** `PUT /products/:id`
+   - **Description:** Updates a product by its ID (Admin only).
+   - **Request Body:**
+     ```json
+     {
+       "name": "iPhone 14 Pro",
+       "description": "Latest Apple smartphone with advanced features",
+       "price": 1099.99,
+       "stock": 50
+     }
+     ```
+   - **Response:**
+     ```json
+     {
+       "_id": "507f1f77bcf86cd799439011",
+       "name": "iPhone 14 Pro",
+       "description": "Latest Apple smartphone with advanced features",
+       "price": 1099.99,
+       "stock": 50
+     }
+     ```
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+5. **Delete a Product**
+   - **Endpoint:** `DELETE /products/:id`
+   - **Description:** Deletes a product by its ID (Admin only).
+   - **Response:**
+     ```json
+     {
+       "message": "Product successfully deleted"
+     }
+     ```
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License.
